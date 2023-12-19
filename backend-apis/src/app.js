@@ -13,10 +13,10 @@ const createCookies = require("./middleware/createCookies")
 const teacherRouter = require("./route/teacherRouter");
 const studentRouter = require("./route/studentRouter");
 
-const authRouter = require("./route/authRouter");
-const doctorRouter = require("./route/doctorRouter");
-const clinicRouter = require("./route/clinicRouter");
-const patientRouter = require("./route/patientRouter");
+// const authRouter = require("./route/authRouter");
+// const doctorRouter = require("./route/doctorRouter");
+// const clinicRouter = require("./route/clinicRouter");
+// const patientRouter = require("./route/patientRouter");
 
 app.use(helmet({ 
   crossOriginResourcePolicy: { policy: "same-site" },
@@ -42,10 +42,10 @@ app.get("/", (req, res) => {
 app.use("/teacher", teacherRouter);
 app.use("/student", studentRouter);
 
-app.use("/auth", [ authRouter, createCookies ]);
-app.use("/doctor", doctorRouter);
-app.use("/clinic", clinicRouter);
-app.use("/patient", patientRouter);
+// app.use("/auth", [ authRouter, createCookies ]);
+// app.use("/doctor", doctorRouter);
+// app.use("/clinic", clinicRouter);
+// app.use("/patient", patientRouter);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {
