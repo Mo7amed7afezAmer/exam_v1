@@ -53,12 +53,14 @@ async function checkData(table, col, val) {
         if (rows[0].length > 0) {
             return {
                 ok: true,
-                message: langs("checkMessage", rows[0].length)
+                message: langs("checkMessage", rows[0].length),
+                data: rows[0][0].id
             }
         } else {
             return {
                 ok: false,
-                error: langs("checkError", rows[0].length)
+                error: langs("checkError", rows[0].length),
+                data: rows[0][0].id
             }
         }
 
@@ -66,7 +68,11 @@ async function checkData(table, col, val) {
         return err.message;
     }
 }
-
+checkData("question", "question_name", "what is ....... name ?")
+.then(
+    (resolve) => console.log(resolve),
+    (rej) => console.log(rej)
+);
 // restore default value
 async function resetDoctorStatus() {
     try {
@@ -716,8 +722,91 @@ async function con_updatePatientTicket(tstatus, patientId) {
 //     (rej) => console.log(rej)
 // );
 
+// ---------------------------------
+// getExam teacher phase
+async function getExamTeacherPhase(tid, phid) {
+    try {
+        
+        // Variables
+        let sql = `SELECT * FROM exams WHERE t_id = ? AND ph_id = ?`;
+
+        // Execute query on DB
+        let rows = await db.execute(sql, [tid, phid]);
+
+        // Check if doctors are not there in db return error
+        if (rows[0].length < 1) return {
+            ok: false,
+            error: `not found doctors`
+        }
+
+        return {
+            ok: true,
+            length: rows[0].length,
+            content: rows[0]
+        };
+
+    } catch (err) {
+        return err.message;
+    }
+}
+// get class teacher phase
+async function getClassTeacherPhase(tid, phid) {
+    try {
+        
+        // Variables
+        let sql = `SELECT * FROM class WHERE t_id = ? AND ph_id = ?`;
+
+        // Execute query on DB
+        let rows = await db.execute(sql, [tid, phid]);
+
+        // Check if doctors are not there in db return error
+        if (rows[0].length < 1) return {
+            ok: false,
+            error: `not found doctors`
+        }
+
+        return {
+            ok: true,
+            length: rows[0].length,
+            content: rows[0]
+        };
+
+    } catch (err) {
+        return err.message;
+    }
+}
+// get student in group
+async function getStudentInClass(classId) {
+    try {
+        
+        // Variables
+        let sql = ` SELECT student.* FROM student
+                    INNER JOIN student_class ON student_class.st_id = student.id
+                    WHERE student_class.cl_id = ?`;
+
+        // Execute query on DB
+        let rows = await db.execute(sql, [classId]);
+
+        // Check if doctors are not there in db return error
+        if (rows[0].length < 1) return {
+            ok: false,
+            error: `not found doctors`
+        }
+
+        return {
+            ok: true,
+            length: rows[0].length,
+            content: rows[0]
+        };
+
+    } catch (err) {
+        return err.message;
+    }
+}
+
 module.exports = {
     isLogin,
+    checkData,
     // global
     getALL,
     createtObject,
@@ -735,7 +824,12 @@ module.exports = {
     customFetchPatient,
     // control with doctor
     con_getPatient,
-    con_updatePatientTicket
+    con_updatePatientTicket,
+    // ------------------------
+    getExamTeacherPhase,
+    getClassTeacherPhase,
+    getStudentInClass
+
 }
 
 // UPDATE doctor INNER JOIN clinic ON doctor.clinic_id = clinic.id SET doctor.doctor_status = 1, clinic.start_time = "2", clinic.end_time = "5" WHERE doctor.id = 41
