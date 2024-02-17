@@ -716,13 +716,14 @@ async function con_updatePatientTicket(tstatus, patientId) {
 
 
 // test ===================
-// getClinicForDisplay()
-// .then(
-//     (resolve) => console.log(resolve),
-//     (rej) => console.log(rej)
-// );
+updateObject("student_class", 3, ["pending"], 1)
+.then(
+    (resolve) => console.log(resolve),
+    (rej) => console.log(rej)
+);
 
 // ---------------------------------
+// getExam teacher phase
 // getExam teacher phase
 async function getExamTeacherPhase(tid, phid) {
     try {
@@ -750,7 +751,7 @@ async function getExamTeacherPhase(tid, phid) {
     }
 }
 // get class teacher phase
-async function getClassTeacherPhase(tid, phid) {
+async function getTeacherClassesInPhase(tid, phid) {
     try {
         
         // Variables
@@ -803,6 +804,207 @@ async function getStudentInClass(classId) {
         return err.message;
     }
 }
+// get teacher students
+async function getTeacherStudents(tId) {
+    try {
+        
+        // Variables
+        let sql = ` SELECT student.id, student.name FROM student
+                    INNER JOIN student_class ON student_class.st_id = student.id
+                    WHERE student_class.cl_id IN (SELECT id FROM class WHERE class.t_id = ?)
+                    GROUP BY student.name`;
+
+        // Execute query on DB
+        let rows = await db.execute(sql, [tId]);
+
+        // Check if doctors are not there in db return error
+        if (rows[0].length < 1) return {
+            ok: false,
+            error: `not found doctors`
+        }
+
+        return {
+            ok: true,
+            length: rows[0].length,
+            content: rows[0]
+        };
+
+    } catch (err) {
+        return err.message;
+    }
+}
+// get teacher group
+async function getTeacherGroup(tid) {
+    try {
+        
+        // Variables
+        let sql = `SELECT * FROM class WHERE t_id = ?`;
+
+        // Execute query on DB
+        let rows = await db.execute(sql, [tid]);
+
+        if (rows[0].length < 1) return {
+            ok: false,
+            error: `not found doctors`
+        }
+
+        return {
+            ok: true,
+            length: rows[0].length,
+            content: rows[0]
+        };
+
+    } catch (err) {
+        return err.message;
+    }
+}
+// get exam questions
+async function getExamQuestions(exId) {
+    try {
+        let sqlExam = `SELECT * FROM exams WHERE id = ?`
+        let sqlQuestions = `
+                    SELECT question.* FROM question
+                    INNER JOIN exams ON exams.id = question.ex_id
+                    WHERE question.ex_id = ?`;
+        // execute query on DB
+        let exam = await db.execute(sqlExam, [ exId ]);
+        let questions = await db.execute(sqlQuestions, [ exId ]);
+        
+
+        if (exam[0].length > 0) {
+            return {
+                ok: true,
+                length: questions[0].length,
+                exam: exam[0],
+                questions: questions[0]
+            }
+        } else {
+            return {
+                ok: false,
+                error: langs("notFoundData")
+            }
+        } 
+    } catch(err) {
+        return err.message;
+    }
+}
+// get pending class
+async function getPendingClass(tid) {
+    try {
+        
+        // Variables
+        let sql = `
+                SELECT student_class.*, student.name, class.name AS class_name FROM student_class
+                INNER JOIN student ON student.id = student_class.st_id
+                INNER JOIN class ON class.id = student_class.cl_id
+                WHERE class.t_id = ? AND student_class.pending = 0`;
+
+        // Execute query on DB
+        let rows = await db.execute(sql, [tid]);
+
+        if (rows[0].length < 1) return {
+            ok: false,
+            error: `not found doctors`
+        }
+
+        return {
+            ok: true,
+            length: rows[0].length,
+            content: rows[0]
+        };
+
+    } catch (err) {
+        return err.message;
+    }
+}
+
+/*
+    ========================================================
+    -- custom crud operation [ student role ] on Database --
+    ========================================================
+*/
+// get group
+async function getGroup(stId) {
+    try {
+        let sql = `
+                    SELECT class.* FROM class
+                    INNER JOIN student_class ON student_class.cl_id = class.id
+                    WHERE student_class.st_id = ? AND student_class.pending = 1`;
+        // execute query on DB
+        let rows = await db.execute(sql, [ stId ]);
+        
+
+        if (rows[0].length > 0) {
+            return {
+                ok: true,
+                length: rows[0].length,
+                content: rows[0]
+            }
+        } else {
+            return {
+                ok: false,
+                error: langs("notFoundData")
+            }
+        } 
+    } catch(err) {
+        return err.message;
+    }
+}
+// get live exams
+async function getLiveExams(stId) {
+    try {
+        let sql = `
+                SELECT exam_class.*, exams.name FROM exam_class
+                INNER JOIN exams ON exams.id = exam_class.ex_id
+                INNER JOIN class ON class.id = exam_class.cl_id
+                INNER JOIN student_class ON student_class.cl_id = exam_class.cl_id
+                WHERE student_class.st_id = ?
+                GROUP BY exam_class.ex_id`;
+        // execute query on DB
+        let rows = await db.execute(sql, [ stId ]);
+        
+
+        if (rows[0].length > 0) {
+            return {
+                ok: true,
+                length: rows[0].length,
+                content: rows[0]
+            }
+        } else {
+            return {
+                ok: false,
+                error: langs("notFoundData")
+            }
+        } 
+    } catch(err) {
+        return err.message;
+    }
+}
+async function getGroupInPhase(phid) {
+    try {
+        
+        // Variables
+        let sql = `SELECT * FROM class WHERE ph_id = ?`;
+
+        // Execute query on DB
+        let rows = await db.execute(sql, [phid]);
+
+        // Check if doctors are not there in db return error
+        if (rows[0].length < 1) return {
+            ok: false,
+            error: `not found doctors`
+        }
+
+        return {
+            ok: true,
+            length: rows[0].length,
+            content: rows[0]
+        };
+
+    } catch (err) {
+        return err.message;
+    }
+}
 
 module.exports = {
     isLogin,
@@ -827,9 +1029,18 @@ module.exports = {
     con_updatePatientTicket,
     // ------------------------
     getExamTeacherPhase,
-    getClassTeacherPhase,
-    getStudentInClass
-
+    getTeacherClassesInPhase,
+    getStudentInClass,
+    getTeacherGroup,
+    getTeacherStudents,
+    getExamQuestions,
+    getPendingClass,
+    // ------------------------
+    // --     student role   -- 
+    // ------------------------
+    getGroup,
+    getLiveExams,
+    getGroupInPhase
 }
 
 // UPDATE doctor INNER JOIN clinic ON doctor.clinic_id = clinic.id SET doctor.doctor_status = 1, clinic.start_time = "2", clinic.end_time = "5" WHERE doctor.id = 41

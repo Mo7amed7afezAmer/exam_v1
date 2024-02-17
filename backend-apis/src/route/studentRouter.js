@@ -20,7 +20,7 @@ router.post("/login", async function (req, res, next) {
 router.post("/register", async function (req, res, next) {
     try {
         // res.json(await crudOperations.isLogin(req.body.name, req.body.password));
-        req.isRegister = await crudOperations.createtObject("student", ["name", "password", "ph_id"], req.body.name, req.body.password, req.body.phaseId);
+        req.isRegister = await crudOperations.createtObject("student", ["name", "password", "ph_id"], req.body.name, req.body.password, req.body.phaseMaterial);
     } catch (err) {
         console.error(`Error while update user `, err.message);
     }
@@ -52,6 +52,35 @@ router.post("/create-exam", auth, async function (req, res, next) {
 router.post("/add-answer", auth, async function (req, res, next) {
     try {
         res.json(await crudOperations.createtObject("answer_sheet", ["answer", "ex_id", "st_id", "cl_id", "qu_id"], req.body.answer, req.body.examId, req.user.roles[0].id, req.body.classId, req.body.questionId));
+    } catch (err) {
+        console.error(`Error while update user `, err.message);
+    }
+    next();
+});
+
+/* ----------------------- classes ---------------- */
+// get group
+router.get("/get-group", auth, async function (req, res, next) {
+    try {
+        res.json(await crudOperations.getGroup(req.user.roles[0].id));
+    } catch (err) {
+        console.error(`Error while update user `, err.message);
+    }
+    next();
+});
+// get live exams
+router.get("/get-live-exams", auth, async function (req, res, next) {
+    try {
+        res.json(await crudOperations.getLiveExams(req.user.roles[0].id));
+    } catch (err) {
+        console.error(`Error while update user `, err.message);
+    }
+    next();
+});
+// get group in phase
+router.get("/get-group-in-phase", auth, async function (req, res, next) {
+    try {
+        res.json(await crudOperations.getGroupInPhase(req.user.roles[0].ph_id));
     } catch (err) {
         console.error(`Error while update user `, err.message);
     }
