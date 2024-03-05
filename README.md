@@ -4,9 +4,9 @@ Exam App is a platform for organization education members such as teacher
 you can manage exams from create to result exam
 
 ## provide some features
-    - create exams from mind or app
-    - add questions
-    - reports for student
+- create exams from mind or app
+- add questions
+- reports for student
 
 ## Screenshots
 
