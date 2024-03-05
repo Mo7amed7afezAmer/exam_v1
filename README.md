@@ -23,6 +23,7 @@ you can manage exams from create to result exam
 
 | Part | Topic     | Video url                                                 | Starting Branch                                                      | Result Branch                                                         |
 | ---- | --------- | --------------------------------------------------------- | -------------------------------------------------------------------- | -------------|
+| 1 | prepare | 12 | start | end |
 
 ## Tech Stack
 
