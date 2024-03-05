@@ -19,6 +19,11 @@ you can manage exams from create to result exam
 
 </div>
 
+## Project parts
+
+| Part | Topic     | Video url                                                 | Starting Branch                                                      | Result Branch                                                         |
+| ---- | --------- | --------------------------------------------------------- | -------------------------------------------------------------------- | -------------|
+
 ## Tech Stack
 
 **Mobile**: React Native, Expo
