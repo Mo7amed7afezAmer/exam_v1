@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "AwesomeProject",
+    "slug": "exam-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
+        "ExpoLocalization_supportsRTL": true
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.anonymous.AwesomeProject"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "supportsRTL": true,
+      "eas": {
+        "projectId": "953ad21f-a51d-4dd0-988b-0788af694689"
+      }
+    },
+    "plugins": [
+      "expo-localization"
+    ],
+    "locales": {
+      "en": "./constants/languages/translations/english.json"
+    },
+    "owner": "mo7amedexam"
+  }
+}

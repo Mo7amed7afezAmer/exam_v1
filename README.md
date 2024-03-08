@@ -27,10 +27,3 @@ you can manage exams from create to result exam
 
 </div>
 
-## Project parts
-
-| Part | Topic     | Video url                                                 | Starting Branch                                                      | Result Branch                                                         |
-| ---- | --------- | --------------------------------------------------------- | -------------------------------------------------------------------- | -------------|
-| 1 | prepare | 12 | start | end |
-| 1 | prepare | 12 |  asdwdaqwfw start | end |
-| 1 | prepare | 12 | start | end asfasfas asdas |
