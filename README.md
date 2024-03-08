@@ -8,6 +8,14 @@ you can manage exams from create to result exam
 - add questions
 - reports for student
 
+## project components
+
+**Mobile**: React Native, Expo
+
+**Backend**: Node Js, ExpressJs, Restful Apis
+
+**Database**: Database design, mysql
+
 ## Screenshots
 
 <div style="display: flex; flex-direction: 'row';">
@@ -26,11 +34,3 @@ you can manage exams from create to result exam
 | 1 | prepare | 12 | start | end |
 | 1 | prepare | 12 |  asdwdaqwfw start | end |
 | 1 | prepare | 12 | start | end asfasfas asdas |
-
-## Tech Stack
-
-**Mobile**: React Native, Expo
-
-**Backend**: Node Js, ExpressJs, Restful Apis
-
-**Database**: Database design, mysql
